@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: accounts
+  datasource:
+    url: jdbc:h2:~/test
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  # *** PROPIEDAD CLAVE PARA FORZAR LA EJECUCIÓN DEL SCRIPT ***
+  sql:
+    init:
+      mode: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+server:
+  port: 8080
