@@ -1,1 +1,10 @@
-http://localhost:8080/hello
+### Create Account
+POST http://localhost:8080/api/accounts
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "mobileNumber": "1234567890"
+}
