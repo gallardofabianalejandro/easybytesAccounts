@@ -3,8 +3,9 @@ package com.nacionservicios.accounts.service.impl;
 import com.nacionservicios.accounts.dto.CustomerDto;
 import com.nacionservicios.accounts.entity.Account;
 import com.nacionservicios.accounts.entity.Customer;
-import com.nacionservicios.accounts.exceptions.CustomerAlreadyExistsException;
 import com.nacionservicios.accounts.mappers.CustomerMapper;
+import com.nacionservicios.accounts.starter.exceptionhandling.domain.BusinessException;
+import com.nacionservicios.accounts.starter.exceptionhandling.errors.AccountErrorCodes;
 import com.nacionservicios.accounts.repository.AccountRepository;
 import com.nacionservicios.accounts.repository.CustomerRepository;
 import com.nacionservicios.accounts.service.IAccountService;
@@ -30,7 +31,8 @@ public class AccountServiceImpl implements IAccountService {
 
         Optional<Customer> customerOptional = customerRepository.findByMobileNumber(customerDto.mobileNumber());
         if (customerOptional.isPresent()) {
-            throw new CustomerAlreadyExistsException("Customer already exists with mobile number: " + customerDto.mobileNumber());
+            throw BusinessException.of(AccountErrorCodes.CUSTOMER_ALREADY_EXISTS,
+                "mobileNumber", customerDto.mobileNumber());
         }
 
         customer.setCreatedAt(LocalDateTime.now());

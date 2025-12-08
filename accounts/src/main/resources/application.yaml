@@ -22,3 +22,16 @@ spring:
         format_sql: true
 server:
   port: 8080
+
+# Exception Handling Starter Configuration
+app:
+  exception:
+    include-stack-trace: false  # Solo desarrollo
+    include-cause: true
+    log-level: ERROR
+    sensitive-fields:
+      - password
+      - ssn
+      - creditCardNumber
+    expose-error-codes: true
+    base-error-uri: https://api.company.com/errors
