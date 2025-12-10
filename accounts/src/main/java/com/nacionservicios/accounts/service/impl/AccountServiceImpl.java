@@ -1,11 +1,12 @@
 package com.nacionservicios.accounts.service.impl;
 
 import com.company.exceptionhandling.starter.domain.BusinessException;
+import com.nacionservicios.accounts.dto.AccountDto;
 import com.nacionservicios.accounts.dto.CustomerDto;
 import com.nacionservicios.accounts.entity.Account;
 import com.nacionservicios.accounts.entity.Customer;
+import com.nacionservicios.accounts.mappers.AccountsMapper;
 import com.nacionservicios.accounts.mappers.CustomerMapper;
-
 import com.nacionservicios.accounts.repository.AccountRepository;
 import com.nacionservicios.accounts.repository.CustomerRepository;
 import com.nacionservicios.accounts.service.IAccountService;
@@ -17,31 +18,55 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 
-import static com.nacionservicios.accounts.controllers.AccountsConstants.SAVINGS;
+import static com.nacionservicios.accounts.constants.AccountsConstants.SAVINGS;
+
 @Service
 @AllArgsConstructor
 public class AccountServiceImpl implements IAccountService {
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
+    private final AccountsMapper accountsMapper;
 
     @Override
     public void createAccount(CustomerDto customerDto) {
         // Convert CustomerDto to Customer entity using the mapper
-        Customer customer = customerMapper.toCustomer(customerDto);
 
         Optional<Customer> customerOptional = customerRepository.findByMobileNumber(customerDto.mobileNumber());
         if (customerOptional.isPresent()) {
             throw BusinessException.of(AccountErrorCodes.CUSTOMER_ALREADY_EXISTS,
-                "mobileNumber", customerDto.mobileNumber());
+                    "mobileNumber", customerDto.mobileNumber());
         }
 
+        Customer customer = customerOptional.get();
         customer.setCreatedAt(LocalDateTime.now());
         customer.setCreatedBy("Anonymus");
 
         // Save the customer to the database
         customerRepository.save(customer);
         accountRepository.save(createNewAccount(customer));
+    }
+
+    @Override
+    public void getAccount(String mobileNumber) {
+
+    }
+
+    @Override
+    public CustomerDto getAccounts(String mobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber)
+                .orElseThrow(() -> BusinessException.of(AccountErrorCodes.CUSTOMER_NOT_FOUND,
+                "mobileNumber", mobileNumber));
+
+        Account account = accountRepository.findByCustomerId(customer.getCustomerId())
+                .orElseThrow(() -> BusinessException.of(AccountErrorCodes.ACCOUNT_NOT_FOUND,
+                "customerId", customer.getCustomerId().toString()));
+
+        CustomerDto customerDto = customerMapper.toCustomerDto(customer);
+        customerDto.accountDto(accountsMapper.toAccountDto(account));
+        customerDto.withAccountDto(accountsMapper.toAccountDto(account));
+
+        return customerDto;
     }
 
 

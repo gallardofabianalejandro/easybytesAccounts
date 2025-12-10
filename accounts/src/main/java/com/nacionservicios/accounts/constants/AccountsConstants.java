@@ -1,4 +1,4 @@
-package com.nacionservicios.accounts.controllers;
+package com.nacionservicios.accounts.constants;
 
 public class AccountsConstants {
 

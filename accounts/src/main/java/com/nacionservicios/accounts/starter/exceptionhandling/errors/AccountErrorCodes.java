@@ -11,4 +11,16 @@ public interface AccountErrorCodes {
             "Customer already exists",
             HttpStatus.CONFLICT
     );
+    ErrorCode CUSTOMER_NOT_FOUND = ErrorCode.of(
+            "CUSTOMER_NOT_FOUND",
+            "Customer not found",
+            HttpStatus.NOT_FOUND
+    );
+
+    // Account errors
+    ErrorCode ACCOUNT_NOT_FOUND = ErrorCode.of(
+            "ACCOUNT_NOT_FOUND",
+            "Account not found",
+            HttpStatus.NOT_FOUND
+    );
 }
