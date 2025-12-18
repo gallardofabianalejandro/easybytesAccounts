@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    @Query("select c from Customer c where c.mobileNumber = ?1")
     Optional<Customer> findByMobileNumber(String mobileNumber);
 
 }

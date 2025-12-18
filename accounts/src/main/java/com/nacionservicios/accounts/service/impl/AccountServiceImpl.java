@@ -1,7 +1,6 @@
 package com.nacionservicios.accounts.service.impl;
 
 import com.company.exceptionhandling.starter.domain.BusinessException;
-import com.nacionservicios.accounts.dto.AccountDto;
 import com.nacionservicios.accounts.dto.CustomerDto;
 import com.nacionservicios.accounts.entity.Account;
 import com.nacionservicios.accounts.entity.Customer;
@@ -15,7 +14,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Random;
 
 import static com.nacionservicios.accounts.constants.AccountsConstants.SAVINGS;
@@ -32,13 +30,13 @@ public class AccountServiceImpl implements IAccountService {
     public void createAccount(CustomerDto customerDto) {
         // Convert CustomerDto to Customer entity using the mapper
 
-        Optional<Customer> customerOptional = customerRepository.findByMobileNumber(customerDto.mobileNumber());
-        if (customerOptional.isPresent()) {
+        customerRepository.findByMobileNumber(
+                customerDto.mobileNumber()).ifPresent(customer -> {
             throw BusinessException.of(AccountErrorCodes.CUSTOMER_ALREADY_EXISTS,
                     "mobileNumber", customerDto.mobileNumber());
-        }
+        });
 
-        Customer customer = customerOptional.get();
+        Customer customer = customerMapper.toCustomer(customerDto);
         customer.setCreatedAt(LocalDateTime.now());
         customer.setCreatedBy("Anonymus");
 
@@ -56,17 +54,14 @@ public class AccountServiceImpl implements IAccountService {
     public CustomerDto getAccounts(String mobileNumber) {
         Customer customer = customerRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> BusinessException.of(AccountErrorCodes.CUSTOMER_NOT_FOUND,
-                "mobileNumber", mobileNumber));
+                        "mobileNumber", mobileNumber));
 
         Account account = accountRepository.findByCustomerId(customer.getCustomerId())
                 .orElseThrow(() -> BusinessException.of(AccountErrorCodes.ACCOUNT_NOT_FOUND,
-                "customerId", customer.getCustomerId().toString()));
+                        "customerId", customer.getCustomerId().toString()));
 
-        CustomerDto customerDto = customerMapper.toCustomerDto(customer);
-        customerDto.accountDto(accountsMapper.toAccountDto(account));
-        customerDto.withAccountDto(accountsMapper.toAccountDto(account));
+        return customerMapper.toCustomerDtoWithAccount(customer, account);
 
-        return customerDto;
     }
 
 
