@@ -10,4 +10,6 @@ public interface IAccountService {
     void getAccount(String mobileNumber);
 
     CustomerDto getAccounts(String mobileNumber);
+
+    boolean updateAccount(CustomerDto customerDto);
 }

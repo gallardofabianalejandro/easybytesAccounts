@@ -16,6 +16,8 @@ public class AccountsConstants {
     public static final String MESSAGE_200 ="Request processed successfully";
     public static final String MESSAGE_400 = "Bad request";
     public static final String MESSAGE_500 = "Internal server error contact Dev Team";
+    public static final String STATUS_304 ="304";
+    public static final String MESSAGE_304 ="Request not modified";
 
 
 }

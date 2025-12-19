@@ -30,4 +30,14 @@ public class AccountController {
 
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<ResponseDto> updateAccount(@RequestBody CustomerDto customerDto) {
+        boolean isUpdated = accountService.updateAccount(customerDto);
+        if (isUpdated) {
+            return ResponseEntity.ok(new ResponseDto(STATUS_200, MESSAGE_200));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED)
+                    .body(new ResponseDto(STATUS_304, MESSAGE_304));
+        }
+    }
 }

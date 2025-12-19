@@ -64,6 +64,24 @@ public class AccountServiceImpl implements IAccountService {
 
     }
 
+    @Override
+    public boolean updateAccount(CustomerDto customerDto) {
+
+        Account account = accountRepository.findById(customerDto.accountDto().accountNumber())
+                .orElseThrow(() -> BusinessException.of(AccountErrorCodes.ACCOUNT_NOT_FOUND,
+                        "accountNumber", customerDto.accountDto().accountNumber().toString()));
+
+        accountRepository.save(accountsMapper.toAccount(customerDto.accountDto()));
+
+        Customer customer = customerRepository.findById(account.getCustomerId())
+                .orElseThrow(() -> BusinessException.of(AccountErrorCodes.CUSTOMER_NOT_FOUND,
+                        "getCustomerId", account.getCustomerId()));
+
+        customerRepository.save(customerMapper.toCustomer(customerDto));
+
+        return true;
+    }
+
 
     private Account createNewAccount(Customer customer) {
         Account newAccount = new Account();
