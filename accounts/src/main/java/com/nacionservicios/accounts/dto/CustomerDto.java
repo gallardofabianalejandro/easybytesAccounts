@@ -12,7 +12,7 @@ import java.io.Serializable;
  * DTO for {@link com.nacionservicios.accounts.entity.Customer}
  */
 public record CustomerDto(@NotBlank(message = "Name is required") @Size(max = 100) String name,
-                          @NotBlank(message = "Email is required") @Size(max = 100) @Email String email,
-                          @Pattern(regexp = "^\\d{10}$") @NotBlank(message = "Mobile number is required") @Size(max = 20) String mobileNumber,
+                          @NotBlank(message = "Email is required") @Size(max = 100) @Email(message = "Invalid email format") String email,
+                          @Pattern(regexp = "^\\d{10}$", message = "Mobile number must be 10 digits") @NotBlank(message = "Mobile number is required") @Size(max = 20) String mobileNumber,
                           @Valid AccountDto accountDto) implements Serializable {
 }
