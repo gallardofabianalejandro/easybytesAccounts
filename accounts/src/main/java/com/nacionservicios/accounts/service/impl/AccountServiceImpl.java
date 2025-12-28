@@ -1,6 +1,7 @@
 package com.nacionservicios.accounts.service.impl;
 
 import com.company.exceptionhandling.starter.domain.BusinessException;
+import com.nacionservicios.accounts.dto.AccountDto;
 import com.nacionservicios.accounts.dto.CustomerDto;
 import com.nacionservicios.accounts.entity.Account;
 import com.nacionservicios.accounts.entity.Customer;
@@ -31,12 +32,12 @@ public class AccountServiceImpl implements IAccountService {
         // Convert CustomerDto to Customer entity using the mapper
 
         customerRepository.findByMobileNumber(
-                customerDto.mobileNumber()).ifPresent(customer -> {
+            customerDto.mobileNumber()).ifPresent(customer -> {
             throw BusinessException.of(AccountErrorCodes.CUSTOMER_ALREADY_EXISTS,
                     "mobileNumber", customerDto.mobileNumber());
         });
 
-        Customer customer = customerMapper.toCustomer(customerDto);
+        Customer customer = customerMapper.toCustomer(customerDto,new Customer());
         customer.setCreatedAt(LocalDateTime.now());
         customer.setCreatedBy("Anonymus");
 
@@ -71,14 +72,25 @@ public class AccountServiceImpl implements IAccountService {
                 .orElseThrow(() -> BusinessException.of(AccountErrorCodes.ACCOUNT_NOT_FOUND,
                         "accountNumber", customerDto.accountDto().accountNumber().toString()));
 
-        accountRepository.save(accountsMapper.toAccount(customerDto.accountDto()));
-
+        accountRepository.save(accountsMapper.updateAccountFromDto(customerDto.accountDto(), account));
         Customer customer = customerRepository.findById(account.getCustomerId())
                 .orElseThrow(() -> BusinessException.of(AccountErrorCodes.CUSTOMER_NOT_FOUND,
                         "getCustomerId", account.getCustomerId()));
 
-        customerRepository.save(customerMapper.toCustomer(customerDto));
 
+        customerRepository.save(customerMapper.toCustomer(customerDto,customer));
+
+        return true;
+    }
+
+    @Override
+    public boolean deleteAccount(String mobileNumber) {
+       var customer = customerRepository.findByMobileNumber(mobileNumber)
+                .orElseThrow(() -> BusinessException.of(AccountErrorCodes.CUSTOMER_NOT_FOUND,
+                        "mobileNumber", mobileNumber));
+
+       customerRepository.deleteById(customer.getCustomerId());
+       accountRepository.deleteByCustomerId(customer.getCustomerId());
         return true;
     }
 

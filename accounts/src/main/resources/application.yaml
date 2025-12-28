@@ -36,6 +36,11 @@ app:
     sensitive-fields:
       - password
       - ssn
-      - creditCardNumber
+      - creditCard
+      - accountNumber
+      - routingNumber
+      - cvv
+      - pin
+      - email
     expose-error-codes: true
     base-error-uri: https://api.company.com/errors
