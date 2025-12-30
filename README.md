@@ -25,6 +25,14 @@ Servicio de cuentas desarrollado con Spring Boot para la gestión de cuentas de 
 
 ## Changelog
 
+### Versión 0.0.26-SNAPSHOT
+
+#### Modificado
+- **pom.xml**: Actualizada la versión de `springdoc-openapi-starter-webmvc-ui` a `2.7.0` para resolver incompatibilidad con Spring Boot 3.4.x.
+
+#### Problema Resuelto
+- **Swagger UI**: Solucionado error 500 al acceder a `/swagger-ui/index.html` causado por `NoSuchMethodError: ControllerAdviceBean.<init>`.
+
 ### Versión 0.0.25-SNAPSHOT
 
 #### Agregado
