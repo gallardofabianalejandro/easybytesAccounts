@@ -25,6 +25,18 @@ Servicio de cuentas desarrollado con Spring Boot para la gestión de cuentas de 
 
 ## Changelog
 
+### Versión 0.0.25-SNAPSHOT
+
+#### Agregado
+- **Soporte de Auditoría**: Se ha añadido soporte de auditoría a nivel de entidad JPA para registrar automáticamente la fecha de creación/modificación y el usuario.
+- **`BaseEntity.java`**: Nueva clase base para entidades con campos de auditoría (`createdAt`, `createdBy`, `updatedAt`, `updatedBy`).
+- **`AuditAwareImpl.java`**: Implementación de `AuditorAware` para obtener el auditor actual (actualmente "ACCOUNTS_MS").
+- **`@EnableJpaAuditing`**: Anotación agregada en `AccountsApplication.java` para habilitar la auditoría JPA.
+
+#### Modificado
+- **`AccountServiceImpl.java`**: Refactorizado para eliminar la configuración manual de campos de auditoría, delegando esta responsabilidad a JPA Auditing.
+- Las entidades `Customer` y `Account` ahora extienden `BaseEntity` para heredar las capacidades de auditoría.
+
 ### Versión 0.0.1-SNAPSHOT
 
 #### Modificado
