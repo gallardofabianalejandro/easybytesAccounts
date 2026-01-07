@@ -27,8 +27,25 @@ logging:
 server:
   port: 8080
 
-# Exception Handling Starter Configuration
+# Metadatos para OpenAPI
 app:
+  openapi:
+    title: Accounts Microservice API
+    description: Microservicio de Cuentas - API para la gestión de clientes
+    version: 1.0.0
+    contact-name: Support Team
+    contact-email: support@nacionservicios.com.ar
+
+# Configuración de la interfaz de SpringDoc
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+
   exception:
     include-stack-trace: false  # Solo desarrollo
     include-cause: true
