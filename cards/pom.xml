@@ -9,11 +9,10 @@
     </parent>
     <packaging>jar</packaging>
     <groupId>org.example</groupId>
-    <artifactId>loans</artifactId>
+    <artifactId>cards</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>loans</name>
-    <description>loans</description>
-
+    <name>cards</name>
+    <description>cards</description>
     <properties>
     </properties>
 
@@ -41,14 +40,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>

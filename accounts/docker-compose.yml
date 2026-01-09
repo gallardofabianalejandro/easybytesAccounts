@@ -1,0 +1,40 @@
+services:
+  accounts:
+    image: "gallardobian/accounts:v1"
+    container_name: accounts-ms
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    networks:
+      - banknetwork
+  loans:
+    image: "gallardofabian/loans:v1"
+    container_name: loans-ms
+    ports:
+      - "8090:8090"
+    environment:
+      - BPL_JVM_THREAD_COUNT=50
+      - JAVA_TOOL_OPTIONS=-XX:ReservedCodeCacheSize=64M -XX:MaxMetaspaceSize=100M
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    networks:
+      - banknetwork
+  cards:
+    image: "gallardofabian/cards:v1"
+    container_name: cards-ms
+    ports:
+      - "9000:9000"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    networks:
+      - banknetwork
+networks:
+  banknetwork:
+    driver: bridge

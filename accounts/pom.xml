@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent><groupId>com.nacionservicios.emv</groupId><artifactId>spring-boot-microservice-dependencies</artifactId><version>1.0.0</version></parent>
-
+    <packaging>jar</packaging>
     <groupId>com.nacionservicios.emv</groupId>
     <artifactId>accounts</artifactId>
     <version>0.0.26-SNAPSHOT</version>
@@ -43,4 +43,3 @@
     </build>
 
 </project>
-
