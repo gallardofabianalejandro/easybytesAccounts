@@ -1,6 +1,6 @@
 services:
   accounts:
-    image: "gallardobian/accounts:v1"
+    image: "gallardofabian/accounts:v1"
     container_name: accounts-ms
     ports:
       - "8080:8080"
