@@ -1,11 +1,6 @@
 spring:
-  config:
-    import:
-      - "application-qa.yml"
-      - "application-prod.yml"
-    activate:
-      on-profile: qa
-
+  profiles:
+    active: "qa"
   application:
     name: accounts
   datasource:
