@@ -1,0 +1,20 @@
+spring:
+  config:
+    activate:
+      on-profile: qa
+app:
+  infra:
+    openapi:
+      title: Accounts Microservice API
+      description: Microservicio de Cuentas - API para la gestión de clientes
+      version: 1.1.0
+      contact:
+        name: Support Team
+        email: support@nacionservicios.com.ar
+        url: https://nacionservicios.com.ar
+      security:
+        enabled: true
+        api-key:
+          enabled: true
+          header-name: X-API-Key
+          type: apiKey
