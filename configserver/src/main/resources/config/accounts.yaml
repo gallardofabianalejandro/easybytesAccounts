@@ -1,0 +1,42 @@
+app:
+  infra:
+    openapi:
+      title: Accounts Microservice API
+      description: Microservicio de Cuentas - API para la gestión de clientes
+      version: 1.0.0
+      contact:
+        name: Support Team
+        email: support@nacionservicios.com.ar
+        url: https://nacionservicios.com.ar
+      security:
+        enabled: true
+        api-key:
+          enabled: true
+          header-name: X-API-Key
+          type: apiKey
+
+# Configuración de la interfaz de SpringDoc
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+
+  exception:
+    include-stack-trace: false  # Solo desarrollo
+    include-cause: true
+    log-level: ERROR
+    sensitive-fields:
+      - password
+      - ssn
+      - creditCard
+      - accountNumber
+      - routingNumber
+      - cvv
+      - pin
+      - email
+    expose-error-codes: true
+    base-error-uri: https://api.company.com/errors

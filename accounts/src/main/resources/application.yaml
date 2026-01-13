@@ -1,6 +1,8 @@
 spring:
+  config:
+    import: optional:configserver:http://localhost:8071
   profiles:
-    active: "qa"
+    active: ${SPRING_PROFILES_ACTIVE:qa}
   application:
     name: accounts
   datasource:
@@ -28,47 +30,3 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 server:
   port: 8080
-
-# Metadatos para OpenAPI (usando el starter)
-app:
-  infra:
-    openapi:
-      title: Accounts Microservice API
-      description: Microservicio de Cuentas - API para la gestión de clientes
-      version: 1.0.0
-      contact:
-        name: Support Team
-        email: support@nacionservicios.com.ar
-        url: https://nacionservicios.com.ar
-      security:
-        enabled: true
-        api-key:
-          enabled: true
-          header-name: X-API-Key
-          type: apiKey
-
-# Configuración de la interfaz de SpringDoc
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-  swagger-ui:
-    path: /swagger-ui.html
-    operations-sorter: method
-    tags-sorter: alpha
-
-
-  exception:
-    include-stack-trace: false  # Solo desarrollo
-    include-cause: true
-    log-level: ERROR
-    sensitive-fields:
-      - password
-      - ssn
-      - creditCard
-      - accountNumber
-      - routingNumber
-      - cvv
-      - pin
-      - email
-    expose-error-codes: true
-    base-error-uri: https://api.company.com/errors

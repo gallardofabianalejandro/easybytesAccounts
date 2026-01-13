@@ -1,0 +1,26 @@
+app:
+  infra:
+    openapi:
+      title: Cards Microservice API - QA
+      description: Microservicio de Tarjetas - API para la gestion completa de tarjetas de credito, debito, prepagas y corporativas (Ambiente QA)
+      version: ${APP_VERSION_QA:1.1.0}
+      contact:
+        name: QA Cards Support Team
+        email: qa.cards.support@nacionservicios.com.ar
+        url: https://qa.nacionservicios.com.ar/cards
+      security:
+        enabled: true
+        api-key:
+          enabled: true
+          header-name: X-API-Key
+          type: apiKey
+
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: alpha
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG

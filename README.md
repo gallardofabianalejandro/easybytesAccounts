@@ -94,6 +94,37 @@ Servicio de cuentas desarrollado con Spring Boot para la gestión de cuentas de 
 
 ## Configuración
 
+### Variables de Entorno (enviroments.env)
+Cada módulo utiliza su propio archivo `enviroments.env` en su directorio raíz para configurar variables de entorno de manera independiente:
+
+**Ubicación de archivos:**
+- `accounts/enviroments.env`
+- `loans/enviroments.env`
+- `cards/enviroments.env`
+
+**Contenido de cada archivo:**
+```env
+SPRING_PROFILES_ACTIVE=qa
+APP_VERSION_QA=1.1.0
+APP_VERSION_PROD=2.0.0
+```
+
+**Nota**: Cada módulo puede tener configuraciones diferentes modificando su propio archivo `enviroments.env`. Asegúrate de que estos archivos no se incluyan en el control de versiones (deben estar en `.gitignore`).
+
+### Perfiles de Spring Boot
+
+#### Perfil QA (activo por defecto)
+- **Activación**: `SPRING_PROFILES_ACTIVE=qa`
+- **Versión API**: `${APP_VERSION_QA:1.1.0}`
+- **Logging**: Nivel INFO y DEBUG para web
+- **Configuración**: Optimizada para desarrollo/QA
+
+#### Perfil PROD
+- **Activación**: `SPRING_PROFILES_ACTIVE=prod`
+- **Versión API**: `${APP_VERSION_PROD:2.0.0}`
+- **Logging**: Nivel WARN para reducir ruido
+- **Seguridad**: Stack traces deshabilitados
+
 ### Base de Datos H2
 - **URL**: `jdbc:h2:mem:testdb`
 - **Consola H2**: Disponible en `http://localhost:8080/h2-console`
@@ -125,9 +156,40 @@ app:
 
 ## Ejecución
 
+### Ejecución por Defecto (Perfil QA)
 1. Clonar el repositorio
 2. Ejecutar con Maven: `mvn spring-boot:run`
 3. Acceder a la aplicación en `http://localhost:8080`
+
+### Cambio de Perfil
+
+#### Opción 1: Modificar enviroments.env (Recomendado)
+Para cambiar el perfil de un módulo específico, modifica su archivo `enviroments.env`:
+```env
+SPRING_PROFILES_ACTIVE=prod  # Para producción
+```
+
+#### Opción 2: Parámetros de Línea de Comando
+```bash
+# Para perfil prod
+mvn spring-boot:run -Dspring-boot.run.profiles=prod
+
+# Para perfil qa
+mvn spring-boot:run -Dspring-boot.run.profiles=qa
+```
+
+#### Opción 3: Variable de Entorno del Sistema
+```bash
+export SPRING_PROFILES_ACTIVE=prod
+mvn spring-boot:run
+```
+
+### Verificación del Perfil Activo
+En los logs de inicio verás:
+```
+The following profiles are active: qa
+```
+O en Swagger UI verás la versión correspondiente (1.1.0 para QA, 2.0.0 para PROD).
 
 ## Testing
 

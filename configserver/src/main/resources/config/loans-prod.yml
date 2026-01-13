@@ -1,0 +1,31 @@
+app:
+  infra:
+    openapi:
+      title: Loans Microservice API - PROD
+      description: Microservicio de Prestamos - API para la gestion completa de prestamos personales, hipotecarios, vehiculares y comerciales (Ambiente PRODUCCION)
+      version: ${APP_VERSION_PROD:2.0.0}
+      contact:
+        name: PROD Loans Support Team
+        email: prod.loans.support@nacionservicios.com.ar
+        url: https://nacionservicios.com.ar/loans
+      security:
+        enabled: true
+        api-key:
+          enabled: true
+          header-name: X-API-Key
+          type: apiKey
+
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: alpha
+
+logging:
+  level:
+    root: WARN
+    org.springframework.web: INFO
+
+server:
+  error:
+    include-stack-trace: never
+    include-message: always

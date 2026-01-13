@@ -1,0 +1,31 @@
+app:
+  infra:
+    openapi:
+      title: Cards Microservice API - PROD
+      description: Microservicio de Tarjetas - API para la gestion completa de tarjetas de credito, debito, prepagas y corporativas (Ambiente PRODUCCION)
+      version: ${APP_VERSION_PROD:2.0.0}
+      contact:
+        name: PROD Cards Support Team
+        email: prod.cards.support@nacionservicios.com.ar
+        url: https://nacionservicios.com.ar/cards
+      security:
+        enabled: true
+        api-key:
+          enabled: true
+          header-name: X-API-Key
+          type: apiKey
+
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: alpha
+
+logging:
+  level:
+    root: WARN
+    org.springframework.web: INFO
+
+server:
+  error:
+    include-stack-trace: never
+    include-message: always

@@ -1,0 +1,41 @@
+app:
+  infra:
+    openapi:
+      title: Cards Microservice API
+      description: Microservicio de Tarjetas - API para la gestion completa de tarjetas de credito, debito, prepagas y corporativas
+      version: 1.0.0
+      contact:
+        name: Cards Support Team
+        email: cards.support@nacionservicios.com.ar
+        url: https://nacionservicios.com.ar/cards
+      security:
+        enabled: true
+        api-key:
+          enabled: true
+          header-name: X-API-Key
+          type: apiKey
+
+# Configuracion de la interfaz de SpringDoc
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+  exception:
+    include-stack-trace: false
+    include-cause: true
+    log-level: ERROR
+    sensitive-fields:
+      - password
+      - ssn
+      - creditCard
+      - accountNumber
+      - routingNumber
+      - cvv
+      - pin
+      - email
+    expose-error-codes: true
+    base-error-uri: https://api.nacionservicios.com.ar/errors
