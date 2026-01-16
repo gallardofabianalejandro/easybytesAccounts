@@ -3,6 +3,12 @@ spring:
     import: optional:configserver:http://localhost:8071
   application:
     name: cards
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    config:
+      uri: http://localhost:8071
+      fail-fast: true
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driverClassName: org.h2.Driver
@@ -27,4 +33,33 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 server:
   port: 9000
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
+springdoc:
+  cache:
+    disabled: true
+  swagger-ui:
+    cache:
+      disabled: true
+    try-it-out-enabled: true
+    disable-swagger-default-url: true
+    url: /v3/api-docs
+    config-url: /v3/api-docs/swagger-config
+    refresh-interval: 0
+
+app:
+  infra:
+    openapi:
+      title: Cards Microservice API
+      description: Microservicio de Tarjetas - API para la gestion de tarjetas de credito y debito
+      version: 1.0.0
+      contact:
+        name: Cards Support Team
+        email: cards.support@nacionservicios.com.ar
+        url: https://nacionservicios.com.ar/cards
+      security:
+        enabled: true
