@@ -42,6 +42,7 @@ logging:
     com.openapi.autoconfigure: DEBUG
     com.nacionservicios.accounts.config: DEBUG
     org.springframework.cloud.context: DEBUG
+    org.springframework.cloud.config.client: DEBUG
 server:
   port: 8080
 management:

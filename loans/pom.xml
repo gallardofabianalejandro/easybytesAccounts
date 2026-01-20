@@ -41,7 +41,7 @@
         <dependency>
             <groupId>com.openapi</groupId>
             <artifactId>spring-openapi-starter</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.7</version>
         </dependency>
     </dependencies>
 
