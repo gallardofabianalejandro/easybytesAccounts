@@ -26,6 +26,7 @@ public class LoansService implements ILoansService {
 
     @Override
     public void createLoan(String mobileNumber) {
+
         loansRepository.findByMobileNumber(mobileNumber).ifPresent(loans -> {
             throw BusinessException.of(LoansErrorCodes.LOAN_ALREADY_EXISTS,
                     "mobileNumber", mobileNumber);

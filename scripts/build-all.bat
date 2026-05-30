@@ -5,7 +5,7 @@ cd ..
 echo Building accounts...
 cd accounts
 call mvn compile jib:dockerBuild
-cd ..call mvn compile jib:build
+call mvn compile jib:build
 cd ..
 echo accounts build completed.
 echo.
@@ -24,6 +24,14 @@ call mvn compile jib:dockerBuild
 call mvn compile jib:build
 cd ..
 echo loans build completed.
+echo.
+
+echo Building configserver...
+cd configserver
+call mvn compile jib:dockerBuild
+call mvn compile jib:build
+cd ..
+echo configserver build completed.
 echo.
 
 echo All builds completed successfully!

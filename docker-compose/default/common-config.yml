@@ -1,0 +1,16 @@
+services:
+  network-deploy-service:
+    networks:
+      - banknetwork
+  microservice-base-config:
+    extends:
+      service: network-deploy-service
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_PROFILES_ACTIVE=prod
+
