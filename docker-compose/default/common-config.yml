@@ -10,7 +10,18 @@ services:
         limits:
           memory: 512M
     environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
+ #     - SPRING_RABBITMQ_HOST=rabbitmq
+ #     - SPRING_RABBITMQ_PORT=5672
       - SPRING_PROFILES_ACTIVE=prod
-
+  microservice-db-config:
+    extends:
+      service: network-deploy-service
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot" ]
+      interval: 10s
+      timeout: 20s
+      retries: 10
+      start_period: 10s

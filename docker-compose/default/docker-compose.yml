@@ -1,31 +1,63 @@
 services:
-  rabbit:
-    image: "rabbitmq:3.12-management"
-    hostname: rabbitmq
-    container_name: rabbitmq
+
+  accountsdb:
+    container_name: accountsdb
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "3306:3306"
     environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]  # ← MEJOR formato
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 5s
+      - MYSQL_DATABASE=accountsdb
     extends:
       file: common-config.yml
-      service: network-deploy-service
+      service: microservice-db-config
+
+  loansdb:
+    container_name: loansdb
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_DATABASE=loansdb
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+
+  cardsdb:
+    container_name: cardsdb
+    ports:
+      - "3308:3306"
+    environment:
+      - MYSQL_DATABASE=cardsdb
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+  #  rabbit:
+  #    image: rabbitmq:3.12-management
+  #    hostname: rabbitmq
+  #    container_name: rabbitmq
+  #    ports:
+  #      - "5672:5672"
+  #      - "15672:15672"
+  #    environment:
+  #      - RABBITMQ_DEFAULT_USER=guest
+  #      - RABBITMQ_DEFAULT_PASS=guest
+  #    healthcheck:
+  #      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+  #      interval: 10s
+  #      timeout: 5s
+  #      retries: 10
+  #      start_period: 5s
+  #    extends:
+  #      file: common-config.yml
+  #      service: network-deploy-service
+
   configserver:
-    image: "gallardofabian/configserver:v1"
+    image: gallardofabian/configserver:v1
     container_name: configserver
     ports:
       - "8071:8071"
-    depends_on:
-      rabbit:
-        condition: service_healthy
+
+    #    depends_on:
+    #      rabbit:
+    #        condition: service_healthy
 
     healthcheck:
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8071/actuator/health/readiness || exit 1"]
@@ -33,19 +65,23 @@ services:
       timeout: 10s
       retries: 5
       start_period: 30s
+
     extends:
       file: common-config.yml
       service: microservice-base-config
+
     environment:
       - SPRING_PROFILES_ACTIVE=docker
 
   accounts:
-    image: "gallardofabian/accounts:v1"
+    image: gallardofabian/accounts:v1
     container_name: accounts-ms
     ports:
       - "8080:8080"
     depends_on:
       configserver:
+        condition: service_healthy
+      accountsdb:
         condition: service_healthy
     extends:
       file: common-config.yml
@@ -55,16 +91,21 @@ services:
       - SPRING_CONFIG_IMPORT=optional:configserver:http://configserver:8071
       - SPRING_APPLICATION_NAME=accounts
       - SPRING_PROFILES_ACTIVE=prod
-
+      - SPRING_DATASOURCE_URL=jdbc:mysql://accountsdb:3306/accountsdb
 
   loans:
-    image: "gallardofabian/loans:v1"
+    image: gallardofabian/loans:v1
     container_name: loans-ms
     ports:
       - "8090:8090"
     depends_on:
       configserver:
         condition: service_healthy
+      loansdb:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
     environment:
       - BPL_JVM_THREAD_COUNT=50
       - JAVA_TOOL_OPTIONS=-XX:ReservedCodeCacheSize=64M -XX:MaxMetaspaceSize=100M
@@ -72,17 +113,17 @@ services:
       - SPRING_CONFIG_IMPORT=optional:configserver:http://configserver:8071
       - SPRING_APPLICATION_NAME=loans
       - SPRING_PROFILES_ACTIVE=prod
-    extends:
-      file: common-config.yml
-      service: microservice-base-config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://loansdb:3306/loansdb
 
   cards:
-    image: "gallardofabian/cards:v1"
+    image: gallardofabian/cards:v1
     container_name: cards-ms
     ports:
       - "9000:9000"
     depends_on:
       configserver:
+        condition: service_healthy
+      cardsdb:
         condition: service_healthy
     extends:
       file: common-config.yml
@@ -92,6 +133,7 @@ services:
       - SPRING_CONFIG_IMPORT=optional:configserver:http://configserver:8071
       - SPRING_APPLICATION_NAME=cards
       - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:mysql://cardsdb:3306/cardsdb
 
 networks:
   banknetwork:
